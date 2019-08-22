@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>TodoList</title>
+    <link href="/css/sample.css" th:href="@{/css/Common.css}" rel="stylesheet">
+</head>
+<body>
+<div  th:replace="/layout/Header.html::header"></div>
+
+<div class="create">
+    <form th:action="@{/add}" th:object="${todoEntity}" method="post">
+        <p class="title">新しいToDoを作成する</p>
+        <div class="Complete">
+            <p th:text="${error}" style="color: red"></p>
+            <p th:if="${#fields.hasErrors('todo_title')}" th:errors="*{todo_title}" style="color: red"></p>
+            <p th:unless="${#fields.hasErrors('todo_title')==null}"></p>
+            <p>Todo名<input type="text" th:field="*{todo_title}"></p>
+            <p th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}" style="color: red"></p>
+            <p th:unless="${#fields.hasErrors('deadline')==null}"></p>
+            <p>期限&emsp;&ensp;<input type="date" th:field="*{deadline}"></p>
+        </div>
+        <input id="submit_button" type="submit" value="Todoの追加" class="submit">
+    </form>
+</div>
+
+
+<p th:text="${judge}" class="judge"></p>
+<div class="display" th:each="todo:${todos}">
+        <p th:text="${todo.todo_title}" class="title"></p>
+    <div class="date">
+        <p th:text="|期限:&emsp;${todo.deadline}|"></p>
+        <p th:text="|作成日:${todo.reporting_date}|"></p>
+    </div>
+    <div class="href">
+        <p><a th:href="@{/compilation(id=${todo.id})}" style="background-color:#FF4F02">編集</a></p>
+        <p th:switch="${todo.flag}">
+            <a th:case =="0" th:href="@{/topFlag(id=${todo.id},flag=${todo.flag})}" style="background-color: #FF3333">未完了</a>
+            <a th:case =="1" th:href="@{/topFlag(id=${todo.id},flag=${todo.flag})}" style="background-color: #696969">完了</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>
