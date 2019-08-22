@@ -1,0 +1,105 @@
+*{
+    padding: 0px;
+    margin:0px;
+}
+a{
+    text-decoration: none;
+    color:black;
+}
+.header{
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    border-bottom: solid 2px orange;
+}
+.create{
+    width:60%;
+    height: 200px;
+    list-style: none;
+    border: 1px solid #999999;
+    margin: 40px auto;
+}
+
+.judge{
+    width:60%;
+    margin: 40px auto;
+}
+
+form{
+    margin-top: 20px;
+    overflow: hidden;
+}
+.Complete{
+    float: left;
+    display: inline;
+}
+
+.title{
+    margin-left: 30px;
+}
+
+.Complete p{
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.Complete input{
+    width: 400px;
+    height: 20px;
+}
+input#submit_button{
+    margin-top: 10px;
+    margin-left: 30px;
+    display: inline;
+    float: left;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background-color: #FF4F02;
+    color: #fff;
+    border-style: none;
+}
+
+.display{
+    background-color: white;
+    width:60%;
+    height: 130px;
+    list-style: none;
+    border: 1px solid #999999;
+    margin: 40px auto;
+}
+
+.title{
+    margin-top: 14px;
+}
+
+.date{
+    width: auto;
+    float: left;
+    display: inline;
+    margin-left: 16px;
+    padding: 14px;
+
+}
+.date p{
+    padding-top:10px;
+}
+
+.href{
+    width: 500px;
+    display: inline;
+    position:relative;
+    left:21%;
+    top: 20px;
+}
+.href a{
+    text-align: center;
+    margin-left: 47px;
+    display: inline;
+    float: left;
+    font-size: 1.2em;
+    padding: 15px 0;
+    width: 100px;
+    background-color: #000;
+    color: #fff;
+    border-style: none;
+}

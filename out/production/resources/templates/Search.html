@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/Common.css}" rel="stylesheet">
+    <link th:href="@{/css/Search.css}" rel="stylesheet">
+    <title>検索画面</title>
+</head>
+<body>
+<div class="header">
+    <div class="title">
+        <h1><a href="/">TODOリスト</a></h1>
+    </div>
+    <div class="search">
+        <h2></h2>
+    </div>
+</div>
+<div class="Search">
+    <form th:action="@{/Search/todo_title}" method="post">
+        <input type="text" th:field="${TodoForm.title}" class="text">
+        <input type="submit" value="検索" class="button">
+    </form>
+</div>
+<p th:text="${count}" class="count"></p>
+<div class="display" th:each="todo:${todos}">
+    <p th:text="${todo.todo_title}" class="title"></p>
+    <div class="date">
+        <p th:text="|期限:&emsp;${todo.deadline}|"></p>
+        <p th:text="|作成日:${todo.reporting_date}|"></p>
+    </div>
+    <div class="href">
+        <p><a th:href="@{/Search/compilation(id=${todo.id})}" style="background-color:#FF4F02">編集</a></p>
+        <p><a th:href="@{/Search/changeFlag(id=${todo.id},flag=${todo.flag})}" style="background-color: #FF3333">未完了</a></p>
+    </div>
+</div>
+</body>
+</html>

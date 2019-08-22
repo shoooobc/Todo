@@ -1,0 +1,26 @@
+.Search{
+    width:60%;
+    margin: 40px auto;
+}
+
+.Search .text{
+    width: 80%;
+    height: 50px;
+    font-size: 30px;
+    padding-bottom: 10px;
+}
+
+.Search .button{
+    margin-left: 30px;
+    display: inline;
+    height: 60px;
+    width: 100px;
+    font-size: 1.2em;
+    background-color: #FF4F02;
+    color: #fff;
+    border-style: none;
+}
+
+.count{
+margin-left: 20%;
+}
