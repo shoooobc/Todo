@@ -1,11 +1,13 @@
 package com.example.Todo.Entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-
+@Data
 @Entity
 @Table(name="todolist")
 public class TodoEntity implements Serializable{
