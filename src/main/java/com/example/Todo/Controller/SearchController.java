@@ -6,13 +6,18 @@ import com.example.Todo.Service.TodoService;
 import com.example.Todo.function.EditRecord;
 import com.example.Todo.function.FlagJudge;
 
+import com.example.Todo.function.TodoJudge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -76,14 +81,19 @@ public class SearchController {
     public String getRecord(@RequestParam("id") String id, Model model) throws ParseException {
         EditRecord.displayEdit(id,model,todoService);
         //トップ画面か検索画面かを判定するため
-        model.addAttribute("url","/Search/compilation");
+        model.addAttribute("url","/Search/updateCompilation");
         return "Edit";
     }
 
     //編集データを挿入
-    @RequestMapping(value="/compilation",method =RequestMethod.POST)
-    public ModelAndView editRecord(@RequestParam("todoID") String id,@RequestParam("todo_title") String title,@RequestParam("deadline") String deadline) throws ParseException {
-        EditRecord.toEdit(id,title,deadline,todoService);
+    @RequestMapping(value="/updateCompilation",method =RequestMethod.POST)
+    public ModelAndView editRecord(@Validated @ModelAttribute("todo") TodoEntity todoEntity, BindingResult result,Model model) throws ParseException {
+        if (result.hasErrors()||TodoJudge.getInstance().judgeTime(todoEntity,todoService,model)) {
+            mv.setViewName("Edit");
+            return mv;
+        }
+        //idに当たるレコードをupdateする
+        EditRecord.toEdit(String.valueOf(todoEntity.getId()),todoEntity.getTodo_title(),todoEntity.getDeadline(),todoService);
         return search((TodoForm)session.getAttribute(SESSION_FORM_ID));
     }
 }

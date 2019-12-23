@@ -7,14 +7,16 @@
 </head>
 <body>
 <div  th:replace="/layout/Header.html::header"></div>
-
 <div class="create">
-    <form th:action="${url}"  method="post">
+    <form th:action="${url}"  th:object="${todo}" method="post">
         <p class="title">Todoの内容を変更します</p>
         <div class="Complete">
-            <input type="hidden" name="todoID" th:value="${todo.id}">
-            <p>Todo名<input type="text"  name="todo_title" th:value="${todo.todo_title}"></p>
-            <p>期限&emsp;&ensp;<input type="date" name="deadline" th:value="${todo.deadline}"></p>
+            <p th:text="${error}" style="color: red"></p>
+            <input type="hidden" th:field="*{id}">
+            <p th:if="${#fields.hasErrors('todo_title')}" th:errors="*{todo_title}" style="color: red"></p>
+            <p>Todo名<input type="text" name="todo_title" th:field="*{todo_title}"></p>
+            <p th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}" style="color: red"></p>
+            <p>期限&emsp;&ensp;<input type="date" name="deadline" th:field="*{deadline}"></p>
         </div>
         <input id="submit_button" type="submit" value="Todoを更新" class="submit">
     </form>

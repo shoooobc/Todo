@@ -9,6 +9,7 @@ import com.example.Todo.Service.TodoService;
 import com.example.Todo.function.EditRecord;
 import com.example.Todo.function.FlagJudge;
 
+import com.example.Todo.function.TodoJudge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,21 +24,18 @@ import java.text.SimpleDateFormat;
 
 @Controller
 public class TodoController{
-    //logを取得する変数
-    private static final Logger log = LoggerFactory.getLogger(TodoController.class);
-
     @Autowired
     private TodoService todoService;
-
     //トップ画面
     @GetMapping("/")
     public String top(@ModelAttribute("todoEntity") TodoEntity todoEntity, Model model) {
-        List<TodoEntity> todos = todoService.findAll();
         String judge =todoService.getCount();
         if(judge.equals("0")){
             judge = "登録されたTodoはございません";
             model.addAttribute("judge", judge);
+            return "index";
         }
+        List<TodoEntity> todos = todoService.findAll();
         model.addAttribute("todos", todos);
         return "index";
     }
@@ -46,31 +44,16 @@ public class TodoController{
     public  String addNewRecord(@Validated @ModelAttribute("todoEntity") TodoEntity todoEntity, BindingResult result, Model model) throws ParseException {
         //エラー判定
         if (result.hasErrors()) {
-            for(FieldError err: result.getFieldErrors()) {
-                log.debug(err.getCode());
-            }
             List<TodoEntity> todos = todoService.findAll();
             model.addAttribute("todos", todos);
             return "index";
         }
-        //日付を取得
+//        //日付を取得
         Date nowDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         Date date = format.parse(todoEntity.getDeadline().replaceAll("-","/"));
         format.applyPattern("yyyy年MM月dd日");
-        //同じTodo名があるか判定
-        if(todoService.JudgeTitleName(todoEntity.getTodo_title())!=null){
-            List<TodoEntity> todos = todoService.findAll();
-            String error = "同じTodo名があります";
-            model.addAttribute("todos", todos);
-            model.addAttribute("error", error);
-            return "index";
-         //期限を過去にしていないか判定
-        }else if(format.format(nowDate).compareTo(format.format(date))>0) {
-            List<TodoEntity> todos = todoService.findAll();
-            String error = "未来の日付にしてください";
-            model.addAttribute("todos", todos);
-            model.addAttribute("error", error);
+        if(TodoJudge.getInstance().judgeTime(todoEntity,todoService,model)||TodoJudge.getInstance().judgeTitle(todoEntity,todoService,model)){
             return "index";
         }
         todoEntity.setReporting_date(format.format(nowDate));
@@ -85,14 +68,17 @@ public class TodoController{
         //idにあったデータを取得する
         EditRecord.displayEdit(id,model,todoService);
         //トップ画面か検索画面かを判定するため
-        model.addAttribute("url","/compilation");
+        model.addAttribute("url","/updateCompilation");
         return "Edit";
     }
     //編集データを挿入
-    @PostMapping("/compilation")
-    public String editRecord(@RequestParam("todoID") String id,@RequestParam("todo_title") String title,@RequestParam("deadline") String deadline) throws ParseException {
+    @PostMapping("/updateCompilation")
+    public String editRecord(@Validated @ModelAttribute("todo") TodoEntity todoEntity, BindingResult result,Model model) throws ParseException {
+        if (result.hasErrors()||TodoJudge.getInstance().judgeTime(todoEntity,todoService,model)) {
+            return "Edit";
+        }
         //idに当たるレコードをupdateする
-        EditRecord.toEdit(id,title,deadline,todoService);
+        EditRecord.toEdit(String.valueOf(todoEntity.getId()),todoEntity.getTodo_title(),todoEntity.getDeadline(),todoService);
         return "redirect:/";
     }
     //完了判定

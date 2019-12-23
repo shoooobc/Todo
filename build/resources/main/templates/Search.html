@@ -25,7 +25,7 @@
 <div class="display" th:each="todo:${todos}">
     <p th:text="${todo.todo_title}" class="title"></p>
     <div class="date">
-        <p th:text="|期限:&emsp;${todo.deadline}|"></p>
+        <p th:text="|期限:${todo.deadline}|"></p>
         <p th:text="|作成日:${todo.reporting_date}|"></p>
     </div>
     <div class="href">

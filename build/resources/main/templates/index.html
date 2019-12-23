@@ -13,10 +13,8 @@
         <div class="Complete">
             <p th:text="${error}" style="color: red"></p>
             <p th:if="${#fields.hasErrors('todo_title')}" th:errors="*{todo_title}" style="color: red"></p>
-            <p th:unless="${#fields.hasErrors('todo_title')==null}"></p>
             <p>Todo名<input type="text" th:field="*{todo_title}"></p>
             <p th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}" style="color: red"></p>
-            <p th:unless="${#fields.hasErrors('deadline')==null}"></p>
             <p>期限&emsp;&ensp;<input type="date" th:field="*{deadline}"></p>
         </div>
         <input id="submit_button" type="submit" value="Todoの追加" class="submit">
@@ -28,7 +26,7 @@
 <div class="display" th:each="todo:${todos}">
         <p th:text="${todo.todo_title}" class="title"></p>
     <div class="date">
-        <p th:text="|期限:&emsp;${todo.deadline}|"></p>
+        <p th:text="|期限:${todo.deadline}|"></p>
         <p th:text="|作成日:${todo.reporting_date}|"></p>
     </div>
     <div class="href">

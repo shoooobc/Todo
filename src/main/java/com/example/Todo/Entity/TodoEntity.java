@@ -15,15 +15,19 @@ public class TodoEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="todoID")
     private Integer todoID;
+
     @Column(name ="todo_title")
     @NotEmpty
     @Size(max = 30)
     private String todo_title;
+
     @Column(name ="reporting_date")
     private String reporting_date;
+
     @Column(name ="deadline")
     @NotEmpty
     private String deadline;
+
     @Column(name ="flag")
     private int  flag;
 
